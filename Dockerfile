@@ -1,7 +1,10 @@
 FROM n8nio/n8n:latest
 USER root
-RUN wget -O /tmp/op.zip https://cache.agilebits.com/dist/1P/op2/pkg/v2.30.3/op_linux_amd64_v2.30.3.zip \
-    && unzip /tmp/op.zip -d /usr/local/bin \
-    && rm /tmp/op.zip \
-    && chmod +x /usr/local/bin/op
+RUN apt-get update && apt-get install -y curl gpg debian-archive-keyring \
+    && curl -sS https://downloads.1password.com/linux/keys/1password.asc | \
+       gpg --dearmor --output /usr/share/keyrings/1password-archive-keyring.gpg \
+    && echo "deb [arch=amd64 signed-by=/usr/share/keyrings/1password-archive-keyring.gpg] https://downloads.1password.com/linux/debian/amd64 stable main" \
+       > /etc/apt/sources.list.d/1password.list \
+    && apt-get update && apt-get install -y 1password-cli \
+    && apt-get clean
 USER node
