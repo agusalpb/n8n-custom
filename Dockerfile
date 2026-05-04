@@ -1,4 +1,4 @@
-FROM n8nio/n8n:latest
+FROM n8nio/n8n:2.17.8
 USER root
 RUN microdnf install -y unzip wget || \
     apk add --no-cache unzip wget || \
